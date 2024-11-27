@@ -21,6 +21,7 @@ public class Lugar implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer idLugar;
     @Column(name = "Pais")
     private String pais;   
@@ -52,6 +53,16 @@ public class Lugar implements Serializable {
     public void setLocalidad(String localidad) {
         this.localidad = localidad;
     }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+    
+    
 
     @Override
     public int hashCode() {

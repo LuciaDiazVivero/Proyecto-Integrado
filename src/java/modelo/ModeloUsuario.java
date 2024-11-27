@@ -14,6 +14,7 @@ import javax.persistence.RollbackException;
 import modelo.entidades.Rol;
 import modelo.entidades.Usuario;
 import modelo.entidades.dao.UsuarioJpaController;
+import modelo.entidades.dao.exceptions.NonexistentEntityException;
 
 /**
  *
@@ -38,7 +39,7 @@ public class ModeloUsuario {
         try {
             fechaE = df.parse(fechaNacimiento);
         } catch(ParseException e) {
-            System.err.println("----------- crearLibro: Error al convertir fecha: " + fechaNacimiento);
+            System.err.println("----------- crearUsuario: Error al convertir fecha: " + fechaNacimiento);
         }        
         u.setFechaNacimiento(fechaE);
         
@@ -60,4 +61,61 @@ public class ModeloUsuario {
         emf.close();
         return error;
     }
+    
+    public static Usuario consultarUsuario(Integer id){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);        
+        UsuarioJpaController ujc = new UsuarioJpaController(emf);
+        Usuario u = ujc.findUsuario(id);
+        System.out.println("Fecha de nacimiento desde la base de datos: " + u.getFechaNacimiento());
+
+        emf.close();
+        return u;
+    }
+    
+    public static String actualizarUsuario(Usuario u, String nombre, String apellidos, String email, String contra, Date fechaNacimiento, String telefono, String localidad, String domicilio, String tarjeta, Double saldo, Rol rol){
+        String error = null;
+        u.setNombre(nombre);
+        u.setApellidos(apellidos);
+        u.setEmail(email);
+        u.setContra(contra);
+        u.setFechaNacimiento(fechaNacimiento);
+        u.setTelefono(telefono);
+        u.setLocalidad(localidad);
+        u.setDomicilio(domicilio);
+        u.setTarjeta(tarjeta);
+        u.setSaldo(saldo);
+        u.setRol(rol);
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        UsuarioJpaController ujc = new UsuarioJpaController(emf);
+        try{
+            ujc.edit(u);
+        } catch (NonexistentEntityException ex) {
+            error = "El usuario ha sido eliminado";
+        } catch (Exception ex) {
+            if(ex.getMessage().contains("Duplicate")) {
+                error = "Ya existe un usuario con email " + email;
+            } else {
+                error = "Se ha producido un error al actualizar el usuario " + u;
+            }
+        }
+        emf.close();
+        return error;
+    }
+    
+    public static String eliminarUsuario(Usuario u) {
+        String error = null;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
+        UsuarioJpaController ujc = new UsuarioJpaController(emf);
+        try {
+            ujc.destroy(u.getId());
+        } catch (modelo.entidades.dao.exceptions.NonexistentEntityException ex) {
+            error = "El usuario " + u + " ya ha sido eliminado";
+        } catch (Exception ex) {
+            error = "Se ha producido un error al eliminar el usuario " + u;
+        }
+        emf.close();
+        return error;    
+    }
+    
 }

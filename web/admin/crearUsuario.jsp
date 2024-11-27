@@ -1,6 +1,6 @@
 <%-- 
-    Document   : registro
-    Created on : 10 nov 2024, 18:40:39
+    Document   : crearUsuario
+    Created on : 17 nov 2024, 13:31:07
     Author     : msi
 --%>
 
@@ -11,19 +11,18 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=latin1">
         <!-- Mis CSS -->
-        <link rel="stylesheet" type="text/css" href="./estilo/principal.css">
+        <link rel="stylesheet" type="text/css" href="./../estilo/principal.css">
         <!-- Boostrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <title>Agencia de Viajes - Registro</title>
+        <title>Agencia de Viajes - Crear Usuario</title>
     </head>
     <body>
-        
         <div class="centrado">
             
             <br>
-            <h1>Registro</h1>
+            <h1>Crear Usuario</h1>
             <br>
-
+            
             <form method="post" class="row g-3">
                 
                 <input type="hidden" name="id" value="${usuario.id}">    
@@ -35,7 +34,7 @@
                 
                 <div class="col-md-6">
                     <label for="apellidos" class="form-label">Apellidos</label>
-                    <input type="text" class="form-control" name="apellidos" id="apellidos" required="">
+                    <input type="text" class="form-control" name="apellidos" id="apellidos" required="" >
                 </div>
                 
                 <div class="col-12">
@@ -46,12 +45,7 @@
                 <div class="col-12">
                     <label for="contra" class="form-label">Contraseña</label>
                     <input type="password" class="form-control" name="contra" id="contra" required="">
-                </div>  
-                
-                <div class="col-12">
-                    <label for="repetirContra" class="form-label">Confirmar Contraseña</label>
-                    <input type="password" class="form-control" name="repetirContra" id="repetirContra" required="">
-                </div>                    
+                </div>                
                 
                 <div class="col-md-4">
                     <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
@@ -68,33 +62,47 @@
                     <input type="text" class="form-control" name="domicilio" id="domicilio" required="">
                 </div>     
                 
-                 <div class="col-md-6">
+                 <div class="col-md-4">
                     <label for="telefono" class="form-label">Teléfono</label>
                     <input type="text" class="form-control" name="telefono" id="telefono" required="">
                 </div>                  
 
-                 <div class="col-md-6">
+                 <div class="col-md-4">
                     <label for="tarjeta" class="form-label">Tarjeta</label>
                     <input type="text" class="form-control" name="tarjeta" id="tarjeta" required="">
                 </div>  
+
+                 <div class="col-md-4">
+                    <label for="saldo" class="form-label">Saldo</label>
+                    <input type="number" class="form-control" name="saldo" id="saldo" required="">
+                </div>  
                 
                 <div class="col-12">
-                    <button type="submit" class="btn btn-success">Registrarse</button>
+                    <label for="rol" class="form-label">Rol</label>
+                    <select name="rol" id="rol" class="form-select" required="">
+                        <c:forEach items="${roles}" var="rol">
+                            <option value="${rol}" ${rol == requestScope.rol?'selected':''}>${rol}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success">Crear usuario</button>
                 </div>
             
-            </form>   
+            </form>
             <br>    
-            
+                
             <c:if test="${not empty error}">
+                <br>
                 <div class="error">
-                    ${error}
+                    <c:out value="${error}"/>
                 </div>
-            </c:if>
-            <br>
-
-            <a href="Login">Volver</a> 
-
+            </c:if>      
+            
+            <a href="./GestionUsuarios">Volver</a>
+            
         </div>
-
+                
     </body>
 </html>
